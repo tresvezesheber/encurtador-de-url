@@ -1,6 +1,8 @@
 package br.com.hebio.encurtadordeurl.model;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -18,6 +20,15 @@ public class Link extends AbstractEntity implements Serializable {
 
     @Value("0")
     private int hits;
+
+    @JsonCreator
+    public Link(@JsonProperty("url") String url) {
+        this.url = url;
+    }
+
+    public Link() {
+
+    }
 
 
     public String getCode() {
