@@ -1,9 +1,10 @@
 package br.com.hebio.encurtadordeurl.model;
 
-import org.hibernate.annotations.Entity;
+
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Value;
 
+import javax.persistence.Entity;
 import java.io.Serializable;
 
 @Entity

@@ -2,6 +2,7 @@ package br.com.hebio.encurtadordeurl.model;
 
 
 import br.com.hebio.encurtadordeurl.utils.Converters;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,6 +19,7 @@ public class AbstractEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar dataCadastro;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar dataAlteracao;
 
