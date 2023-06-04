@@ -35,4 +35,8 @@ public class LinkController {
         return linkRepository.findById(id);
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteLink(@PathVariable("id") Long id) {
+        linkRepository.deleteById(id);
+    }
 }
