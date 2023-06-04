@@ -13,7 +13,7 @@ import java.util.Objects;
 @MappedSuperclass
 public class AbstractEntity implements Serializable {
 
-    @JsonIgnore
+    //@JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

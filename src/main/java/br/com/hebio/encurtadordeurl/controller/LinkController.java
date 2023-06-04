@@ -6,6 +6,8 @@ import br.com.hebio.encurtadordeurl.service.LinkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/link")
 public class LinkController {
@@ -26,5 +28,10 @@ public class LinkController {
     public void generateCode(@RequestBody Link link) {
         link.setCode(linkService.generateCode());
         linkRepository.save(link);
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Link> searchLink(@PathVariable("id") Long id) {
+        return linkRepository.findById(id);
     }
 }
