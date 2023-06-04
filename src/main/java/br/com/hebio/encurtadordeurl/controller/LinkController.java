@@ -3,6 +3,7 @@ package br.com.hebio.encurtadordeurl.controller;
 import br.com.hebio.encurtadordeurl.model.Link;
 import br.com.hebio.encurtadordeurl.repository.LinkRepository;
 import br.com.hebio.encurtadordeurl.service.LinkService;
+import br.com.hebio.encurtadordeurl.service.exceptions.LinkNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -24,45 +25,51 @@ public class LinkController {
 
     @GetMapping()
     public ResponseEntity<Iterable<Link>> listLinks() {
-        Iterable<Link> links = linkRepository.findAll();
-        return ResponseEntity.ok().body(links);
+        return ResponseEntity.ok().body(linkService.listLinks());
     }
 
     @PostMapping()
-    public ResponseEntity<Void> generateCode(@RequestBody Link link) {
-        link.setCode(linkService.generateCode());
-        link = linkRepository.save(link);
-
+    public ResponseEntity<Void> saveLink(@RequestBody Link link) {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(link.getId()).toUri();
+                .path("/{id}").buildAndExpand(linkService.saveLink(link)).toUri();
 
         return ResponseEntity.created(uri).build();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> searchLink(@PathVariable("id") Long id) {
-        Optional<Link> link = linkRepository.findById(id);
-        if (!link.isPresent()) {
+        Optional<Link> link = null;
+
+        try {
+            link = linkService.searchLink(id);
+        } catch (LinkNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
+
         return ResponseEntity.ok().body(link);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLink(@PathVariable("id") Long id) {
         try {
-            linkRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } catch (EmptyResultDataAccessException e) {
+            linkService.deleteLink(id);
+        } catch (LinkNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateLink(@RequestBody Link link, @PathVariable("id") Long id) {
-        Optional<Link> linkAux = linkRepository.findById(id);
-        linkAux.get().setUrl(link.getUrl());
-        linkRepository.save(linkAux.get());
+        link.setId(id);
+
+        try {
+            linkService.updateLink(link);
+        } catch (LinkNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+
         return ResponseEntity.noContent().build();
     }
 }
