@@ -18,9 +18,6 @@ import java.util.Optional;
 public class LinkController {
 
     @Autowired
-    private LinkRepository linkRepository;
-
-    @Autowired
     private LinkService linkService;
 
     @GetMapping()
