@@ -42,7 +42,8 @@ public class LinkController {
 
     @PutMapping("/{id}")
     public void updateLink(@RequestBody Link link, @PathVariable("id") Long id) {
-        link.setId(id);
-        linkRepository.save(link);
+        Optional<Link> linkAux = linkRepository.findById(id);
+        linkAux.get().setUrl(link.getUrl());
+        linkRepository.save(linkAux.get());
     }
 }
