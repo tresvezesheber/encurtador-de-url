@@ -34,4 +34,5 @@ public class LinkController {
     public Optional<Link> searchLink(@PathVariable("id") Long id) {
         return linkRepository.findById(id);
     }
+
 }
