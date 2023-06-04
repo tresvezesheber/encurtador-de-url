@@ -39,4 +39,10 @@ public class LinkController {
     public void deleteLink(@PathVariable("id") Long id) {
         linkRepository.deleteById(id);
     }
+
+    @PutMapping("/{id}")
+    public void updateLink(@RequestBody Link link, @PathVariable("id") Long id) {
+        link.setId(id);
+        linkRepository.save(link);
+    }
 }
