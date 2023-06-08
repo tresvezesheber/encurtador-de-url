@@ -3,6 +3,7 @@ package br.com.hebio.encurtadordeurl.service;
 import br.com.hebio.encurtadordeurl.model.Link;
 import br.com.hebio.encurtadordeurl.repository.LinkRepository;
 import br.com.hebio.encurtadordeurl.service.exceptions.LinkNotFoundException;
+import br.com.hebio.encurtadordeurl.service.exceptions.URLAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -27,14 +28,21 @@ public class LinkService {
         return link;
     }
 
+    public void searchUrl(String url) {
+        if (linkRepository.existsByUrl(url)) {
+            throw new URLAlreadyExistsException("A URL já existe");
+        }
+    }
+
     public Long saveLink(Link link) {
+        searchUrl(link.getUrl());
         link.setId(null);
         link.setCode(generateCode());
         return linkRepository.save(link).getId();
     }
 
     public void deleteLink(Long id) {
-        try{
+        try {
             linkRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new LinkNotFoundException("Link não encontrado.");
