@@ -18,8 +18,8 @@ public class LinkController {
     private LinkService linkService;
 
     @GetMapping()
-    public ResponseEntity<Iterable<Link>> listLinks() {
-        return ResponseEntity.ok().body(linkService.listLinks());
+    public ResponseEntity<Iterable<Link>> pageableListLinks(@RequestParam(required = false) Integer size) {
+        return ResponseEntity.ok().body(linkService.pageableListLinks(size));
     }
 
     @PostMapping()

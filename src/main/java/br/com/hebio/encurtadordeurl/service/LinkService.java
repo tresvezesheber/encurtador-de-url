@@ -6,8 +6,11 @@ import br.com.hebio.encurtadordeurl.service.exceptions.LinkNotFoundException;
 import br.com.hebio.encurtadordeurl.service.exceptions.URLAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.Optional;
 
 @Service
@@ -16,8 +19,13 @@ public class LinkService {
     @Autowired
     private LinkRepository linkRepository;
 
-    public Iterable<Link> listLinks() {
-        return linkRepository.findAll();
+     public Iterable<Link> pageableListLinks(Integer size) {
+        if (size == null) {
+            return linkRepository.findAll();
+        } else {
+            PageRequest pageable = PageRequest.of(0, size);
+            return linkRepository.findAll(pageable);
+        }
     }
 
     public Optional<Link> searchLink(Long id) {
